@@ -23,11 +23,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RemoteViews;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -40,8 +45,10 @@ public class UpdateService extends IntentService {
     public static final String ACTION_BATTERY_LOW = "com.em.batterywidget.action.BATTERY_LOW";
     public static final String ACTION_BATTERY_OKAY = "com.em.batterywidget.action.BATTERY_OKAY";
     public static final String ACTION_WIDGET_UPDATE = "com.em.batterywidget.action.WIDGET_UPDATE";
-
     public static final String EXTRA_WIDGET_IDS = "com.em.batterywidget.extra.WIDGET_IDS";
+
+
+    private GestureDetector gd;
 
     /**
      * Creates an UpdateService.
@@ -134,10 +141,50 @@ public class UpdateService extends IntentService {
         ///remoteViews.setViewVisibility(R.id.charge_view, isCharging ? View.VISIBLE : View.INVISIBLE);
         remoteViews.setTextViewText(R.id.batterytext, String.valueOf(level) + "%");
         //tap on widget//
-        Intent activityIntent = new Intent(this, WidgetActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
-        remoteViews.setOnClickPendingIntent(R.id.widget_view, pendingIntent);
+
+        //our activity
+        //Intent activityIntent = new Intent(this, WidgetActivity.class);
+        //PendingIntent batteryactIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+        //remoteViews.setOnClickPendingIntent(R.id.widget_view, pendingIntent);
+
+        //android battery usage
+        Intent powerUsageIntent = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
+        ResolveInfo resolveInfo = getPackageManager().resolveActivity(powerUsageIntent, 0);
+        //PendingIntent androidbatIntent = PendingIntent.getActivity(this, 0, powerUsageIntent, 0);
+        /*
+        // check that the Battery app exists on this device
+        if(resolveInfo != null) {
+            //startActivity(powerUsageIntent);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, powerUsageIntent, 0);
+            remoteViews.setOnClickPendingIntent(R.id.widget_view, pendingIntent);
+        } else {
+            Intent activityIntent = new Intent(this, WidgetActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+            remoteViews.setOnClickPendingIntent(R.id.widget_view, pendingIntent);
+        }
+        */
+
+        //tap on battery percent text will bring our custom activity
+        Intent ownactivityIntent = new Intent(this, WidgetActivity.class);
+        PendingIntent textIntent = PendingIntent.getActivity(this, 0, ownactivityIntent, 0);
+        remoteViews.setOnClickPendingIntent(R.id.batterytext, textIntent);
+
+
+        //tap on image will bring android battery usage
+        if(resolveInfo != null) {
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, powerUsageIntent, 0);
+                remoteViews.setOnClickPendingIntent(R.id.widget_view, pendingIntent);
+            } else {
+                Intent activityIntent = new Intent(this, WidgetActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+                remoteViews.setOnClickPendingIntent(R.id.widget_view, pendingIntent);
+            }
+
+
         return remoteViews;
     }
+
+
+
 
 }
