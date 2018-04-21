@@ -168,7 +168,7 @@ public class UpdateService extends IntentService {
         Intent ownactivityIntent = new Intent(this, WidgetActivity.class);
         PendingIntent textIntent = PendingIntent.getActivity(this, 0, ownactivityIntent, 0);
         remoteViews.setOnClickPendingIntent(R.id.batterytext, textIntent);
-
+        remoteViews.setOnClickPendingIntent(R.id.button, textIntent);
 
         //tap on image will bring android battery usage
         if(resolveInfo != null) {

@@ -109,11 +109,20 @@
         android:src="@drawable/charging"
         android:visibility="invisible" />
 
+    <ImageView
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/charge_view"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/space"
+        android:visibility="visible" />
+
     <TextView
         android:id="@+id/batterytext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/percent100"
+        android:layout_alignBottom="@+id/charge_view"
         android:layout_centerHorizontal="true"
         android:gravity="center|center"
         android:maxLines="1"
