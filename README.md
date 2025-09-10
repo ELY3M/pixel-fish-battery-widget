@@ -3,6 +3,13 @@ Pixel Fish Battery Widget
 
 a battery widget for your Android device.
 
+#NOTE:  
+
+This is older version. this repo will not compile in newer android studio.     
+
+Please see new version at https://github.com/ELY3M/Pixel-Battery-Widget
+
+
 Screenshots
 ======================
 
